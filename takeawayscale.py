@@ -18,17 +18,25 @@ device = max7219(sr, cascaded=4, block_orientation=-90)
 
 # Function for takeaway scale
 def takeAway():
-  # tare the scale
+  # tare scale and initially set time of last removal
   tare()
+  timeOfLastRemoval = time.time()
   
-  # start time
-  start = time.time()
-  
-  # when weight is removed, display it positively
-  # do this for set amount of time
-  while time.time()-start < 15:
+  # while the scale has not been the same for 5+ seconds
+  while time.time()-timeOfLastRemoval < 5:
+    # record old weight to see if removal is still occurring
+    oldWeight = scaleWeight.get()
+    
+    # read weight...positively if removed
     readWeight()
+    
+    # if the weight has changed by more than 0.01, reset time of last removal
+    if(abs(scaleWeight.get()-oldWeight) > 0.01):
+      timeOfLastRemoval = time.time()
+    
+    # update display
     updateNumbers(scaleWeight.get())
+    
     time.sleep(0.001)
 
 # Function for numeric display
