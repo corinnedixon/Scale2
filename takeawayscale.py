@@ -13,7 +13,7 @@ from luma.core.legacy.font import proportional, LCD_FONT
 GPIO.setmode(GPIO.BOARD)
 
 # LED matrix setup
-sr = spi(port=0, device=0, gpio=noop())
+sr = spi(port=0, device=0, gpio=noop(), cs_high=True)
 device = max7219(sr, cascaded=4, block_orientation=-90)
 
 # Function for takeaway scale
