@@ -33,13 +33,16 @@ GPIO.setup(button14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 Pizzas = {"7":0.1, "10":0.22, "12":0.32, "14":0.44}
 
 # Function for takeaway scale
-def takeAway(target):
+def takeAway(startSize):
   # tare scale and initially set time of last removal
   tare()
   timeOfLastRemoval = time.time()
   
   # same size is initially true
   sameSize = True
+  
+  # set target weight from dictionary
+  target = Pizzas[str(startSize)]
   
   # while the target weight has not been reached by +/- 5% for 1 second
   while (abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1) and sameSize:
@@ -57,8 +60,8 @@ def takeAway(target):
     updateNumbers(scaleWeight.get())
     
     # check for more button press
-    size = getSize(size)
-    if target != Pizzas(size):
+    currentSize = getSize(startSize)
+    if currentSize != startSize:
       sameSize = False
     
     time.sleep(0.001)
@@ -153,4 +156,4 @@ size = 14
 while True:
     #Run takeaway function with collected size weight
     size = getSize(size)
-    takeAway(Pizzas[str(size)])
+    takeAway(size)
