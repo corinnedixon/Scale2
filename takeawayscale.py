@@ -93,7 +93,7 @@ def regTakeAway():
   modeChange = False
   
   # while the scale has not been the same for 5+ seconds
-  while time.time()-timeOfLastRemoval < 5 and not(modeChange):
+  while (time.time()-timeOfLastRemoval < 5) and (not(modeChange)):
     # record old weight to see if removal is still occurring
     oldWeight = scaleWeight.get()
     
@@ -108,7 +108,7 @@ def regTakeAway():
     updateNumbers(scaleWeight.get())
     
     # check for button press or change of mode
-    modeChange = buttonPressed() or mode != getMode()
+    modeChange = buttonPressed() or (mode != getMode())
     
     time.sleep(0.001)
 
