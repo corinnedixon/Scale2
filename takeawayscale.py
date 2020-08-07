@@ -220,7 +220,7 @@ mode = getMode()
 # Main loop
 while True:
     #Run takeaway function corresponding to mode and size
-    size = getSize(size, target)
+    size = getSize(size)
     mode = getMode()
     if(mode == 2):
       regTakeAway()
