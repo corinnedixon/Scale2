@@ -29,23 +29,42 @@ GPIO.setup(button10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-# Pizza dictionary with cheese weights
-Pizzas = {"7":0.1, "10":0.22, "12":0.32, "14":0.44}
+# Input pins for switch positions
+cheese = 3
+pepp = 5
+
+# Button set up
+GPIO.setup(cheese, GPIO.IN)
+GPIO.setup(pepp, GPIO.IN)
+
+# Class for pretop pizzas and weights
+class PretopPizza:
+    def __init__(self,cW,pW):
+        self.cheeseWeight = cW
+        self.pepWeight = pW
+
+# Pizza dictionary for pretop weights
+Pizzas = {
+        "7":[0.1,0.06],
+        "10":[0.22,0.15],
+        "12":[0.32,0.22],
+        "14":[0.44,0.3]
+        }
 
 # Function for takeaway scale
-def takeAway(startSize):
+def topTakeAway(startSize,mode):
   # tare scale and initially set time of last removal
   tare()
   timeOfLastRemoval = time.time()
   
-  # make sure the button is not pressed again
-  button = False
+  # make sure the button or switch is not changed
+  modeChange = False
   
   # set target weight from dictionary
-  target = Pizzas[str(startSize)]
+  target = Pizzas[str(startSize)][mode]
   
   # while the target weight has not been reached by +/- 5% for 1 second
-  while ((abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1)) and not(button):
+  while ((abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1)) and not(modeChange):
     # record old weight to see if removal is still occurring
     oldWeight = scaleWeight.get()
     
@@ -59,8 +78,37 @@ def takeAway(startSize):
     # update display
     updateNumbers(scaleWeight.get())
     
-    # check for more button press
-    button = buttonPressed()
+    # check for button press or change of mode
+    modeChange = buttonPressed() or mode != getMode()
+    
+    time.sleep(0.001)
+
+# Function for takeaway scale
+def regTakeAway():
+  # tare scale and initially set time of last removal
+  tare()
+  timeOfLastRemoval = time.time()
+  
+  # make sure the button or switch is not changed
+  modeChange = False
+  
+  # while the scale has not been the same for 5+ seconds
+  while time.time()-timeOfLastRemoval < 5 and not(modeChange):
+    # record old weight to see if removal is still occurring
+    oldWeight = scaleWeight.get()
+    
+    # read weight...positively if removed
+    readWeight()
+    
+    # if the weight has changed by more than 0.01, reset time of last removal
+    if(abs(scaleWeight.get()-oldWeight) > 0.01):
+      timeOfLastRemoval = time.time()
+    
+    # update display
+    updateNumbers(scaleWeight.get())
+    
+    # check for button press or change of mode
+    modeChange = buttonPressed() or mode != getMode()
     
     time.sleep(0.001)
 
@@ -70,6 +118,15 @@ def buttonPressed():
   if GPIO.input(button7) == GPIO.HIGH or GPIO.input(button10) == GPIO.HIGH or GPIO.input(button12) == GPIO.HIGH or GPIO.input(button14) == GPIO.HIGH:
       press = True
   return press
+  
+# Function to check if a button was pressed
+def getMode():
+  mode = 2
+  if GPIO.input(cheese) == GPIO.HIGH:
+      mode = 0
+  elif GPIO.input(pepp) == GPIO.HIGH
+    mode = 1
+  return mode
   
 # Funciton for size input from buttons
 def getSize(currentSize):
@@ -157,8 +214,15 @@ tare()
 # Default size set to 14
 size = 14
 
+# Get current mode for start
+mode = getMode()
+
 # Main loop
 while True:
-    #Run takeaway function with collected size weight
-    size = getSize(size)
-    takeAway(size)
+    #Run takeaway function corresponding to mode and size
+    size = getSize(size, target)
+    mode = getMode()
+    if(mode == 2):
+      regTakeAway()
+    else:
+      topTakeAway(size,mode)
