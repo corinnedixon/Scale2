@@ -65,8 +65,8 @@ def takeAway(target):
 
 # Funciton for size input from buttons
 def getSize(currentSize):
-  size = currentSize
-  if GPIO.input(button7) == GPIO.HIGH:
+    size = currentSize
+    if GPIO.input(button7) == GPIO.HIGH:
       size = 7
     elif GPIO.input(button10) == GPIO.HIGH:
       size = 10
