@@ -152,4 +152,4 @@ size = 14
 while True:
     #Run takeaway function with collected size weight
     size = getSize(size)
-    takeAway(Pizzas(str(size)))
+    takeAway(Pizzas[str(size)])
