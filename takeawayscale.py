@@ -145,6 +145,9 @@ def tare():
 serial_open()
 tare()
 
+# Default size set to 14
+size = 14
+
 # Main loop
 while True:
     #Run takeaway function with collected size weight
