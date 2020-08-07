@@ -156,5 +156,4 @@ size = 14
 while True:
     #Run takeaway function with collected size weight
     size = getSize(size)
-    print(size)
     takeAway(size)
