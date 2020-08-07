@@ -125,7 +125,7 @@ def getMode():
   if GPIO.input(cheese) == GPIO.HIGH:
       mode = 0
   elif GPIO.input(pepp) == GPIO.HIGH:
-    mode = 1
+      mode = 1
   return mode
   
 # Funciton for size input from buttons
@@ -222,6 +222,7 @@ while True:
     #Run takeaway function corresponding to mode and size
     size = getSize(size)
     mode = getMode()
+    print(str(mode) + " " + str(size))
     if(mode == 2):
       regTakeAway()
     else:
