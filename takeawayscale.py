@@ -38,14 +38,14 @@ def takeAway(startSize):
   tare()
   timeOfLastRemoval = time.time()
   
-  # same size is initially true
-  sameSize = True
+  # make sure the button is not pressed again
+  button = False
   
   # set target weight from dictionary
   target = Pizzas[str(startSize)]
   
   # while the target weight has not been reached by +/- 5% for 1 second
-  while ((abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1)) and sameSize:
+  while ((abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1)) and not(button):
     # record old weight to see if removal is still occurring
     oldWeight = scaleWeight.get()
     
@@ -60,12 +60,17 @@ def takeAway(startSize):
     updateNumbers(scaleWeight.get())
     
     # check for more button press
-    currentSize = getSize(startSize)
-    if currentSize != startSize:
-      sameSize = False
+    button = buttonPressed()
     
     time.sleep(0.001)
 
+# Function to check if a button was pressed
+def buttonPressed():
+  press = False
+  if GPIO.input(button7) == GPIO.HIGH or GPIO.input(button10) == GPIO.HIGH or GPIO.input(button12) == GPIO.HIGH or GPIO.input(button14) == GPIO.HIGH:
+      press = True
+  return press
+  
 # Funciton for size input from buttons
 def getSize(currentSize):
     size = currentSize
