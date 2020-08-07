@@ -45,7 +45,7 @@ def takeAway(startSize):
   target = Pizzas[str(startSize)]
   
   # while the target weight has not been reached by +/- 5% for 1 second
-  while (abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1) and sameSize:
+  while ((abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1)) and sameSize:
     # record old weight to see if removal is still occurring
     oldWeight = scaleWeight.get()
     
