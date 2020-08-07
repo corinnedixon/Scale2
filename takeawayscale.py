@@ -74,7 +74,7 @@ def getSize(currentSize):
       size = 12
     elif GPIO.input(button14) == GPIO.HIGH:
       size = 14
-  return size
+    return size
 
 # Function for numeric display
 def updateNumbers(lbs):
