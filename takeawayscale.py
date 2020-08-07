@@ -11,19 +11,38 @@ from luma.core.legacy.font import proportional, LCD_FONT
 
 # Board set up
 GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
 
 # LED matrix setup
 sr = spi(port=0, device=0, gpio=noop(), cs_high=True)
 device = max7219(sr, cascaded=4, block_orientation=-90)
 
+# Input pins for each button
+button7 = 11
+button10 = 12
+button12 = 13
+button14 = 15
+
+# Button set up
+GPIO.setup(button7, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+# Pizza dictionary with cheese weights
+Pizzas = {"7":0.1, "10":0.22, "12":0.32, "14":0.44}
+
 # Function for takeaway scale
-def takeAway():
+def takeAway(target):
   # tare scale and initially set time of last removal
   tare()
   timeOfLastRemoval = time.time()
   
-  # while the scale has not been the same for 5+ seconds
-  while time.time()-timeOfLastRemoval < 5:
+  # same size is initially true
+  sameSize = True
+  
+  # while the target weight has not been reached by +/- 5% for 1 second
+  while (abs(scaleWeight.get()-target) > target/20) or (time.time()-timeOfLastRemoval < 1) and sameSize:
     # record old weight to see if removal is still occurring
     oldWeight = scaleWeight.get()
     
@@ -37,7 +56,24 @@ def takeAway():
     # update display
     updateNumbers(scaleWeight.get())
     
+    # check for more button press
+    size = getSize(size)
+    if target != Pizzas(size):
+      sameSize = False
+    
     time.sleep(0.001)
+
+# Funciton for size input from buttons
+def getSize(currentSize):
+  size = currentSize
+  if GPIO.input(button7) == GPIO.HIGH:
+      size = 7
+    elif GPIO.input(button10) == GPIO.HIGH:
+      size = 10
+    elif GPIO.input(button12) == GPIO.HIGH:
+      size = 12
+    elif GPIO.input(button14) == GPIO.HIGH:
+      size = 14
 
 # Function for numeric display
 def updateNumbers(lbs):
@@ -78,7 +114,7 @@ def readWeight():
                     try:
                         x = round(float(b3) * -fac * 2.20462,2)
                         if x==0:
-                          scaleWeight.set(0.0)
+                          scaleWeight.set(0)
                         else:
                           scaleWeight.set(x)
                     except ValueError:
@@ -105,11 +141,12 @@ def serial_open():
 def tare():
     ser.write(b'TK\n')
     
-#Tare scale before start
+# Tare scale before start
 serial_open()
 tare()
 
 # Main loop
 while True:
-    #Run takeaway function
-    takeAway()
+    #Run takeaway function with collected size weight
+    size = getSize(size)
+    takeAway(Pizzas(str(size)))
