@@ -34,8 +34,8 @@ cheese = 38
 pepp = 40
 
 # Button set up
-GPIO.setup(cheese, GPIO.IN)
-GPIO.setup(pepp, GPIO.IN)
+GPIO.setup(cheese, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pepp, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Class for pretop pizzas and weights
 class PretopPizza:
