@@ -123,7 +123,7 @@ def buttonPressed():
 def getMode():
   mode = 2
   if GPIO.input(cheese) == GPIO.HIGH:
-      mode = 0
+      mode = 1
   elif GPIO.input(pepp) == GPIO.HIGH:
       mode = 1
   return mode
