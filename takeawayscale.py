@@ -18,10 +18,10 @@ sr = spi(port=0, device=0, gpio=noop(), cs_high=True)
 device = max7219(sr, cascaded=4, block_orientation=-90)
 
 # Input pins for each button
-button7 = 11
+button7 = 10
 button10 = 12
-button12 = 13
-button14 = 15
+button12 = 16
+button14 = 18
 
 # Button set up
 GPIO.setup(button7, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -30,8 +30,8 @@ GPIO.setup(button12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Input pins for switch positions
-cheese = 3
-pepp = 5
+cheese = 38
+pepp = 40
 
 # Button set up
 GPIO.setup(cheese, GPIO.IN)
