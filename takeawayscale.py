@@ -30,8 +30,8 @@ GPIO.setup(button12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Input pins for switch positions
-cheese = 3
-pepp = 5
+cheese = 5
+pepp = 7
 
 # Button set up
 GPIO.setup(cheese, GPIO.IN)
@@ -123,7 +123,7 @@ def buttonPressed():
 def getMode():
   mode = 2
   if GPIO.input(cheese) == GPIO.HIGH:
-      mode = 1
+      mode = 0
   elif GPIO.input(pepp) == GPIO.HIGH:
       mode = 1
   return mode
