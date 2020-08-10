@@ -222,11 +222,6 @@ while True:
     #Run takeaway function corresponding to mode and size
     size = getSize(size)
     mode = getMode()
-    print(str(GPIO.input(button7))+"\n")
-    print(str(GPIO.input(button10))+"\n")
-    print(str(GPIO.input(button12))+"\n")
-    print(str(GPIO.input(button14))+"\n")
-    print("MODE: " + str(mode))
     if(mode == 2):
       regTakeAway()
     else:
