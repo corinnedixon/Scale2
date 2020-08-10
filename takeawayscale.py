@@ -122,8 +122,8 @@ def buttonPressed():
 # Function to check if a button was pressed
 def getMode():
   mode = 2
-  if GPIO.input(pepp) == GPIO.HIGH:
-      mode = 0
+  if GPIO.input(cheese) == GPIO.HIGH:
+      mode = 2
   elif GPIO.input(pepp) == GPIO.HIGH:
       mode = 1
   return mode
