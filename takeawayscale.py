@@ -224,5 +224,6 @@ while True:
     mode = getMode()
     if(mode == 2):
       regTakeAway()
+      print(str(scaleWeight.get()))
     else:
       topTakeAway(size,mode)
