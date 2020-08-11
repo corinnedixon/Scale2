@@ -14,7 +14,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
 # LED matrix setup
-sr = spi(port=0, device=0, gpio=noop(), cs_high=False)
+sr = spi(port=0, device=0, gpio=noop(), cs_high=True)
 device = max7219(sr, cascaded=4, block_orientation=-90)
 
 # Input pins for each button
