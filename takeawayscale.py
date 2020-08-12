@@ -9,8 +9,6 @@ from luma.led_matrix.device import max7219
 from luma.core.interface.serial import spi, noop
 from luma.core.legacy.font import proportional, LCD_FONT
 
-#https://www.raspberrypi.org/forums/viewtopic.php?t=280569 TRY THIS
-
 # Board set up
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
