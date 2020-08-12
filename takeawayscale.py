@@ -9,13 +9,15 @@ from luma.led_matrix.device import max7219
 from luma.core.interface.serial import spi, noop
 from luma.core.legacy.font import proportional, LCD_FONT
 
+#https://www.raspberrypi.org/forums/viewtopic.php?t=280569 TRY THIS
+
 # Board set up
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
 # LED matrix setup
-sr = spi(port=0, device=0, gpio=noop(), spi_mode=4)
-device = max7219(sr, cascaded=6, block_orientation=-90)
+sr = spi(port=0, device=0, gpio=noop(), cs_high=True)
+device = max7219(sr, cascaded=4, block_orientation=-90)
 
 # Input pins for each button
 button7 = 10
